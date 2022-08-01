@@ -1,13 +1,13 @@
-import React from 'react';
-import Header from './Header';
-
+import { useState } from 'react';
+import Chats from './Chats';
+import Search from './Search';
 function UserDashboard() {
+  const [email, setEmail] = useState();
+
   return (
     <>
-      <Header />
-      <div className="h-[70vh] flex justify-center items-center">
-        UserDashboard
-      </div>
+      <Search email={email} setEmail={setEmail} />
+      <Chats />
     </>
   );
 }

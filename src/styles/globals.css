@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Alice';
+  @apply text-lg sm:text-xl md:text-2xl
+}

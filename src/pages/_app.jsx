@@ -1,11 +1,12 @@
 import '../styles/globals.css';
 import Head from 'next/head';
 import { AuthProvider } from '../context/AuthContext';
+import Header from '../components/Header';
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Go-sheep</title>
+        <title>Gosheep</title>
         <meta
           name="viewport"
           content="initial-scale=1.0, width=device-width"
@@ -19,6 +20,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="author" content="kamal kashyap" />
       </Head>
       <AuthProvider>
+        <Header />
         <div className=" max-w-4xl m-auto">
           <Component {...pageProps} />
         </div>
