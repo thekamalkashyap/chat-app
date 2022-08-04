@@ -2,11 +2,8 @@ import React from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 import { database } from '../../firebase';
 import { getDoc, setDoc, doc } from 'firebase/firestore';
-import { useAuth } from '../context/AuthContext';
 
-function Search({ email, setEmail }) {
-  const { currentUser } = useAuth();
-
+function Search({ email, setEmail, currentUser }) {
   const handelSubmit = async () => {
     const addChat = async () => {
       await setDoc(doc(database, 'chats', `${currentUser.email}-${email}`), {
@@ -14,7 +11,7 @@ function Search({ email, setEmail }) {
       });
     };
     await getDoc(doc(database, 'users', `${email.trim()}`)).then((contact) => {
-      if (contact.exists()) {
+      if (contact.exists() && contact.data().email != currentUser.email) {
         let cnfrm = confirm(
           `Do you want to start the conversation with ${
             contact.data().email
@@ -23,6 +20,8 @@ function Search({ email, setEmail }) {
         if (cnfrm) {
           addChat();
         }
+      } else if (contact.data().email == currentUser.email) {
+        alert('You cant start chat with yourself');
       } else {
         alert('User not found!');
       }

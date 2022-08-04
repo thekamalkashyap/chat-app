@@ -1,7 +1,7 @@
 import Login from '../components/Login';
 import UserDashboard from '../components/UserDashboard';
 import { useAuth } from '../context/AuthContext';
-import { setDoc, doc, collection, Timestamp } from 'firebase/firestore';
+import { setDoc, doc, Timestamp } from 'firebase/firestore';
 import { database } from '../../firebase';
 import { useEffect } from 'react';
 
@@ -9,12 +9,16 @@ export default function Home() {
   const { currentUser, loading } = useAuth();
 
   const addUser = async () => {
-    await setDoc(doc(database, 'users', `${currentUser.email}`), {
-      name: currentUser.displayName,
-      email: currentUser.email,
-      lastSeen: Timestamp.now(),
-      photoURL: currentUser.photoURL,
-    }).catch((err) => console.warn(err.message));
+    await setDoc(
+      doc(database, 'users', `${currentUser.email}`),
+      {
+        name: currentUser.displayName,
+        email: currentUser.email,
+        lastSeen: Timestamp.now(),
+        photoURL: currentUser.photoURL,
+      },
+      { merge: true }
+    ).catch((err) => console.warn(err.message));
   };
   useEffect(() => {
     if (currentUser) {
