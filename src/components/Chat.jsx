@@ -28,11 +28,11 @@ function Chat({ currentUser, id, users }) {
       onClick={route}
       className="h-10 my-3 flex items-center py-7 hover:bg-gray-700 "
     >
-      <div className=" h-7 w-7 sm:h-12 sm:w-12 mx-3 relative">
+      <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
         {receiverDetails && (
           <Image
             src={receiverDetails.photoURL}
-            alt="avatar"
+            alt={receiverDetails.name[0]}
             layout="fill"
             className=" rounded-full"
             loading="lazy"

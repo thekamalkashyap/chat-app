@@ -49,8 +49,7 @@ export default function ChatScreen({ messages, chat }) {
     }
   });
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  const sendMessage = async () => {
     await setDoc(
       doc(database, 'users', currentUser.email),
       {
@@ -60,7 +59,13 @@ export default function ChatScreen({ messages, chat }) {
     );
 
     await setDoc(
-      collection(database, 'chats', `${router.query.id}`, 'messages'),
+      doc(
+        database,
+        'chats',
+        `${router.query.id}`,
+        'messages',
+        `${currentUser.email}-${Timestamp.now().nanoseconds}`
+      ),
       {
         timestamp: Timestamp.now(),
         message: input,
@@ -81,8 +86,8 @@ export default function ChatScreen({ messages, chat }) {
   };
 
   return (
-    <>
-      <div className="flex items-center mb-12">
+    <div className="w-full relative">
+      <div className="flex items-center mb-12 border-y-2 py-2 border-gray-500 fixed top-16 ">
         <div className=" h-7 w-7 sm:h-12 sm:w-12 mx-3 relative">
           {recipient && (
             <Image
@@ -95,7 +100,7 @@ export default function ChatScreen({ messages, chat }) {
           )}
         </div>
         <div>
-          <h1>{recipientEmail}</h1>
+          {recipient && <h1>{recipient.name}</h1>}
           {recipient ? (
             <p>
               Last active:{' '}
@@ -111,7 +116,7 @@ export default function ChatScreen({ messages, chat }) {
         </div>
       </div>
 
-      <div ref={endOfMessageRef}>
+      <div ref={endOfMessageRef} className='fixed top-[9rem] bottom-[3rem] left-0 right-0 pl-7 overflow-scroll'>
         {messagesSnapShot && messagesSnapShot.docs.length != 0
           ? messagesSnapShot.docs.map((message) => (
               <Message
@@ -119,7 +124,7 @@ export default function ChatScreen({ messages, chat }) {
                 user={message.data().user}
                 message={{
                   ...message.data(),
-                  timestamp: message.data().timestamp.now(),
+                  timestamp: message.data().timestamp,
                 }}
               />
             ))
@@ -128,17 +133,26 @@ export default function ChatScreen({ messages, chat }) {
             ))}
       </div>
 
-      <div>
-        <input value={input} onChange={(e) => setInput(e.target.value)} />
+      <div className="fixed bottom-0 flex">
+        <input
+          value={input}
+          className=" bg-transparent w-full rounded-lg border-2"
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
+        />
         <button
           disabled={!input}
-          className=" disabled:opacity-50"
-          type="submit"
+          className=" bg-blue-600 rounded-lg px-1 border-2 border-blue-600 disabled:opacity-50"
           onClick={sendMessage}
         >
           Send
         </button>
       </div>
-    </>
+    </div>
   );
 }
