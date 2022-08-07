@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { database } from '../../firebase';
 import Image from 'next/image';
@@ -8,7 +8,7 @@ function Chat({ currentUser, id, users }) {
 
   const router = useRouter();
   const route = () => {
-    router.push(`/${id}`);
+    router.push(`/chat/${id}`);
   };
 
   const getReceiverEmail = (users, userLoggedIn) =>
@@ -26,7 +26,7 @@ function Chat({ currentUser, id, users }) {
   return (
     <div
       onClick={route}
-      className="h-10 flex items-center py-7 hover:bg-gray-700 "
+      className="h-10 my-3 flex items-center py-7 hover:bg-gray-700 "
     >
       <div className=" h-7 w-7 sm:h-12 sm:w-12 mx-3 relative">
         {receiverDetails && (
@@ -35,6 +35,7 @@ function Chat({ currentUser, id, users }) {
             alt="avatar"
             layout="fill"
             className=" rounded-full"
+            loading="lazy"
           />
         )}
       </div>

@@ -3,25 +3,46 @@ import { SearchIcon } from '@heroicons/react/outline';
 import { database } from '../../firebase';
 import { getDoc, setDoc, doc } from 'firebase/firestore';
 
-function Search({ email, setEmail, currentUser }) {
+function Search({ email, setEmail, currentUser, snapShot }) {
   const handelSubmit = async () => {
     const addChat = async () => {
       await setDoc(doc(database, 'chats', `${currentUser.email}-${email}`), {
         users: [currentUser.email, email],
       });
     };
+
+    const chatAlreadyExists = () => {
+      if (snapShot) {
+        return snapShot.docs.find((chat) =>
+          chat.data().users.find((user) => user == email)
+        );
+      } else {
+        return false;
+      }
+    };
+
     await getDoc(doc(database, 'users', `${email.trim()}`)).then((contact) => {
-      if (contact.exists() && contact.data().email != currentUser.email) {
+      if (
+        contact.exists() &&
+        contact.data().email != currentUser.email &&
+        !chatAlreadyExists()
+      ) {
         let cnfrm = confirm(
           `Do you want to start the conversation with ${
             contact.data().email
           } (${contact.data().name}) `
         );
+
         if (cnfrm) {
           addChat();
         }
-      } else if (contact.data().email == currentUser.email) {
+      } else if (
+        contact.exists() &&
+        contact.data().email == currentUser.email
+      ) {
         alert('You cant start chat with yourself');
+      } else if (contact.exists() && chatAlreadyExists()) {
+        alert('Chat already exists');
       } else {
         alert('User not found!');
       }
@@ -42,6 +63,12 @@ function Search({ email, setEmail, currentUser }) {
           type="email"
           value={email}
           placeholder="Search user email"
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') {
+              e.preventDefault();
+              handelSubmit();
+            }
+          }}
           onChange={(e) => {
             setEmail(e.target.value);
           }}

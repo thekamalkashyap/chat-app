@@ -18,6 +18,8 @@ function MyApp({ Component, pageProps }) {
           content="RealTime chat app using nextjs, tailwindcss and firebase"
         />
         <meta name="author" content="kamal kashyap" />
+        <link rel="icon" href="/logo.ico" type="image/x-ico" />
+        <meta property="og:image" content="/ogLogo.webp" />
       </Head>
       <AuthProvider>
         <Header />

@@ -7,13 +7,14 @@ import { useAuth } from '../context/AuthContext';
 
 function UserDashboard() {
   const { currentUser } = useAuth();
-  const [inputEmail, setInputEmail] = useState();
-  const [snapShot, setSnapShot] = useState();
+  const [inputEmail, setInputEmail] = useState('');
+  const [snapShot, setSnapShot] = useState(null);
 
   const q = query(
     collection(database, 'chats'),
     where('users', 'array-contains', `${currentUser.email}`)
   );
+
   onSnapshot(q, (querySnapshot) => {
     setSnapShot(querySnapshot);
   });
@@ -24,9 +25,12 @@ function UserDashboard() {
         email={inputEmail}
         setEmail={setInputEmail}
         currentUser={currentUser}
+        snapShot={snapShot}
       />
       <div className="mt-10">
         {snapShot &&
+          snapShot.docs.length != 0 &&
+          currentUser &&
           snapShot.docs.map((chat) => {
             return (
               <Chat
@@ -37,6 +41,16 @@ function UserDashboard() {
               />
             );
           })}
+        {!snapShot && (
+          <div className=" h-[70vh]  w-full flex justify-center items-center">
+            loading...
+          </div>
+        )}
+        {snapShot && snapShot.docs.length == 0 && (
+          <div className=" h-[70vh]  w-full flex justify-center items-center">
+            No chat found
+          </div>
+        )}
       </div>
     </>
   );

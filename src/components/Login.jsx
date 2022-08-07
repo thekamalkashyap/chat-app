@@ -14,7 +14,7 @@ function Login() {
       )}
       <button
         onClick={signInWithGoogle}
-        className="flex items-center bg-gray-100 py-2 pr-3 border border-gray-500 shadow-black shadow-sm text-blue-500 font-bold rounded-full"
+        className="flex items-center bg-gray-100 py-2 pr-3 border border-gray-500 shadow-black shadow-sm text-blue-500 font-bold rounded-full cursor-pointer"
       >
         <div className=" relative h-7 w-7 mx-2">
           <Image src={googleLogo} alt="Google" layout="fill" priority />
