@@ -18,16 +18,17 @@
     "@heroicons/react": "^1.0.6",
     "aos": "^2.3.4",
     "firebase": "^9.9.1",
+    "moment": "^2.29.4",
     "next": "12.1.6",
-    "next-pwa": "^5.5.5",
+    "next-pwa": "5.5.2",
     "preact": "^10.10.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "sharp": "^0.30.7"
+    "sharp": "^0.30.7",
+    "timeago-react": "^3.0.5",
+    "webpack": "^5.74.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^12.2.3",
-    "@svgr/webpack": "^6.3.1",
     "autoprefixer": "^10.4.7",
     "eslint": "8.15.0",
     "eslint-config-next": "^12.1.6",

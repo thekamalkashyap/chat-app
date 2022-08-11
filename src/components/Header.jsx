@@ -26,7 +26,7 @@ function Header() {
         onClick={() => {
           document.getElementById('portal').classList.toggle('hidden');
         }}
-        className=" hidden absolute right-3 shadow-sm shadow-white bg-slate-100 text-black p-3 "
+        className=" hidden absolute right-3 rounded-lg bg-[#414141] p-3 "
       >
         {currentUser && (
           <>
@@ -34,14 +34,14 @@ function Header() {
               <div className=" relative h-9 w-9">
                 <Image
                   src={currentUser.photoURL}
-                  alt="avatar"
+                  alt={currentUser.displayName[0]}
                   layout="fill"
                   className=" rounded-full"
                 />
               </div>
               <div>
                 <h1>{currentUser.email}</h1>
-                <h2 className="text-gray-600">{currentUser.displayName}</h2>
+                <h2 className="text-[#797979]">{currentUser.displayName}</h2>
               </div>
             </div>
             <button onClick={logout}>Logout</button>

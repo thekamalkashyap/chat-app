@@ -5,12 +5,10 @@ import {
   query,
   collection,
   orderBy,
-  limit,
-  where,
   getDocs,
   getDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
-import { Timestamp } from 'firebase/firestore';
 import Router from 'next/router.js';
 import { useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext.js';
@@ -44,7 +42,7 @@ export async function getServerSideProps(context) {
     }))
     .map((messages) => ({
       ...messages,
-      timestamp: Timestamp.now(),
+      timestamp: serverTimestamp(),
     }));
 
   const chatResponse = await getDoc(ref);

@@ -9,12 +9,14 @@ import {
   query,
   setDoc,
   Timestamp,
+  serverTimestamp,
   where,
 } from 'firebase/firestore';
 import { onSnapshot } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import Timeago from 'timeago-react';
 
 export default function ChatScreen({ messages, chat }) {
   const [input, setInput] = useState('');
@@ -30,6 +32,10 @@ export default function ChatScreen({ messages, chat }) {
       setRecipientEmail(chat.users.filter((u) => u != currentUser.email)[0]);
     }
   }, [currentUser, recipientEmail]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -59,13 +65,13 @@ export default function ChatScreen({ messages, chat }) {
   });
 
   const sendMessage = async () => {
-    // await setDoc(
-    //   doc(database, 'users', currentUser.email),
-    //   {
-    //     lastSeen: Timestamp.now(),
-    //   },
-    //   { merge: true }
-    // );
+    await setDoc(
+      doc(database, 'users', currentUser.email),
+      {
+        lastSeen: serverTimestamp(),
+      },
+      { merge: true }
+    );
 
     await setDoc(
       doc(
@@ -76,7 +82,7 @@ export default function ChatScreen({ messages, chat }) {
         `${currentUser.email}-${Timestamp.now().nanoseconds}`
       ),
       {
-        timestamp: Timestamp.now(),
+        timestamp: serverTimestamp(),
         message: input,
         user: currentUser.email,
         photoURL: currentUser.photoURL,
@@ -84,7 +90,6 @@ export default function ChatScreen({ messages, chat }) {
     ).catch((err) => alert(err.message));
 
     setInput('');
-    // scrollToBottom();
   };
 
   const scrollToBottom = () => {
@@ -95,11 +100,11 @@ export default function ChatScreen({ messages, chat }) {
   return (
     <>
       <div className="chatName flex items-center ">
-        <div className=" h-7 w-7 sm:h-12 sm:w-12 mx-3 relative">
+        <div className=" h-9 w-9 sm:h-12 sm:w-12 mx-3 relative">
           {recipient && (
             <Image
               src={recipient.photoURL}
-              alt="avatar"
+              alt={recipient.name[0]}
               layout="fill"
               className=" rounded-full"
               loading="lazy"
@@ -108,19 +113,20 @@ export default function ChatScreen({ messages, chat }) {
         </div>
         <div>
           {recipient && <h1>{recipient.name}</h1>}
-          {recipient && <h2>{recipient.email}</h2>}
-          {/* {recipient && time ? (
+          {recipient ? (
             <p>
-              Last active:{' '}
+              Last seen:{' '}
               {recipient.lastSeen ? (
-                <span>{`${recipient.lastSeen.seconds}`}</span>
+                <span>
+                  <Timeago datetime={recipient.lastSeen.toDate()} />
+                </span>
               ) : (
                 'Unavailable'
               )}
             </p>
           ) : (
             <p>Loading last seen...</p>
-          )} */}
+          )}
         </div>
       </div>
 
@@ -151,10 +157,10 @@ export default function ChatScreen({ messages, chat }) {
         )}
       </div>
 
-      <div className="inputMessages">
+      <div className="inputMessages border rounded-lg">
         <input
           value={input}
-          className=" bg-transparent w-full rounded-lg border-2"
+          className=" bg-transparent focus:outline-none px-2 w-full mr-1"
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key == 'Enter' && input) {
@@ -165,7 +171,7 @@ export default function ChatScreen({ messages, chat }) {
         />
         <button
           disabled={!input}
-          className=" bg-blue-600 rounded-lg px-1 border-2 border-blue-600 disabled:opacity-50"
+          className=" border-l px-1 disabled:opacity-50"
           onClick={sendMessage}
         >
           Send

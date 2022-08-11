@@ -1,10 +1,11 @@
 {
     "name": "Gosheep: Realtime chat app",
     "short_name": "gosheep",
+    "start_url":"/",
     "description": "chat app based on nextjs firebase and tailwindcss.",
-    "background_color": "#1f2937",
+    "background_color": "#292929",
     "display": "standalone",
-    "theme_color": "#1f2937",
+    "theme_color": "#292929",
     "icons": [
         {
             "src": "/icons/icon-48x48.png",

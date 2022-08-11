@@ -1,7 +1,7 @@
 import Login from '../components/Login';
 import UserDashboard from '../components/UserDashboard';
 import { useAuth } from '../context/AuthContext';
-import { setDoc, doc, Timestamp } from 'firebase/firestore';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { database } from '../../firebase';
 import { useEffect } from 'react';
 
@@ -14,7 +14,7 @@ export default function Home() {
       {
         name: currentUser.displayName,
         email: currentUser.email,
-        lastSeen: Timestamp.now(),
+        lastSeen: serverTimestamp(),
         photoURL: currentUser.photoURL,
       },
       { merge: true }
@@ -29,7 +29,7 @@ export default function Home() {
     <>
       {!currentUser ? <Login /> : <UserDashboard />}
       {loading && (
-        <div className=" z-30 dark:bg-gray-800 fixed top-0 h-screen w-screen text-yellow-500 flex justify-center items-center">
+        <div className=" z-30 bg-[#292929] fixed top-0 h-screen w-screen flex justify-center items-center">
           loading...
         </div>
       )}

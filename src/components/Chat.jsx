@@ -31,26 +31,29 @@ function Chat({ currentUser, id, users }) {
   });
 
   return (
-    <div
-      onClick={route}
-      className="h-10 my-3 flex items-center py-7 hover:bg-gray-700 cursor-pointer "
-    >
-      <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
-        {receiverDetails && (
-          <Image
-            src={receiverDetails.photoURL}
-            alt={receiverDetails.name[0]}
-            layout="fill"
-            className=" rounded-full"
-            loading="lazy"
-          />
-        )}
-      </div>
-      <div>
-        {receiverDetails && <h1>{receiverDetails.name}</h1>}
-        <h2>{receiverEmail}</h2>
-      </div>
-    </div>
+    <>
+      {receiverDetails && (
+        <div
+          onClick={route}
+          className="h-10 my-3 rounded-lg flex items-center py-7 hover:bg-[#383838] cursor-pointer "
+        >
+          <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
+            <Image
+              src={receiverDetails.photoURL}
+              alt={receiverDetails.name[0]}
+              layout="fill"
+              className=" rounded-full"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <h1>{receiverDetails.name}</h1>
+            <h2>{receiverDetails.email}</h2>
+          </div>
+        </div>
+      )}
+      {!receiverDetails && <div className=" text-center">loading...</div>}
+    </>
   );
 }
 

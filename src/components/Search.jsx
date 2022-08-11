@@ -33,14 +33,17 @@ function Search({ email, setEmail, currentUser, snapShot }) {
 
         if (cnfrm) {
           addChat();
+          setEmail('');
         }
       } else if (
         contact.exists() &&
         contact.data().email == currentUser.email
       ) {
         alert('You cant start chat with yourself');
+        setEmail('');
       } else if (contact.exists() && chatAlreadyExists()) {
         alert('Chat already exists');
+        setEmail('');
       } else {
         alert('User not found!');
       }
@@ -62,7 +65,7 @@ function Search({ email, setEmail, currentUser, snapShot }) {
           value={email}
           placeholder="Search user email"
           onKeyDown={(e) => {
-            if (e.key == 'Enter') {
+            if (e.key == 'Enter' && email) {
               e.preventDefault();
               handelSubmit();
             }
@@ -70,7 +73,7 @@ function Search({ email, setEmail, currentUser, snapShot }) {
           onChange={(e) => {
             setEmail(e.target.value);
           }}
-          className="px-3 w-full rounded-full bg-transparent"
+          className="px-3 w-full rounded-full focus:outline-none bg-transparent"
         />
       </div>
     </>

@@ -2,7 +2,6 @@ import '../styles/globals.css';
 import Head from 'next/head';
 import { AuthProvider } from '../context/AuthContext';
 import Header from '../components/Header';
-import { useEffect } from 'react';
 function MyApp({ Component, pageProps }) {
   return (
     <>
