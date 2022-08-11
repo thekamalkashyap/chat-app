@@ -1,6 +1,12 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  getDocs,
+} from 'firebase/firestore';
 import { database } from '../../firebase';
 import Image from 'next/image';
 function Chat({ currentUser, id, users }) {
@@ -19,6 +25,7 @@ function Chat({ currentUser, id, users }) {
     collection(database, 'users'),
     where('email', '==', `${receiverEmail}`)
   );
+
   onSnapshot(q, (querySnapshot) => {
     setReceiverDetails(querySnapshot.docs[0].data());
   });
@@ -26,7 +33,7 @@ function Chat({ currentUser, id, users }) {
   return (
     <div
       onClick={route}
-      className="h-10 my-3 flex items-center py-7 hover:bg-gray-700 "
+      className="h-10 my-3 flex items-center py-7 hover:bg-gray-700 cursor-pointer "
     >
       <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
         {receiverDetails && (

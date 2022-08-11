@@ -11,12 +11,23 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
+import Router from 'next/router.js';
+import { useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext.js';
 
 export default function Id({ messages, chat }) {
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    if (!currentUser) {
+      Router.replace('/');
+    }
+  }, [currentUser]);
+
   return (
-    <div className="m-7">
+    <>
       <ChatScreen chat={chat} messages={messages} />
-    </div>
+    </>
   );
 }
 
@@ -41,11 +52,6 @@ export async function getServerSideProps(context) {
     id: chatResponse.id,
     ...chatResponse.data(),
   };
-
-  console.log(chat);
-  if (messagesResponse && messages) {
-    console.log(messages);
-  }
 
   return {
     props: {

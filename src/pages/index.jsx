@@ -18,7 +18,7 @@ export default function Home() {
         photoURL: currentUser.photoURL,
       },
       { merge: true }
-    ).catch((err) => console.warn(err.message));
+    ).catch((err) => alert(err.message));
   };
   useEffect(() => {
     if (currentUser) {

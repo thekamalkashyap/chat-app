@@ -8,7 +8,7 @@ function Search({ email, setEmail, currentUser, snapShot }) {
     const addChat = async () => {
       await setDoc(doc(database, 'chats', `${currentUser.email}-${email}`), {
         users: [currentUser.email, email],
-      });
+      }).catch((err) => alert(err.message));
     };
 
     const chatAlreadyExists = () => {
@@ -28,9 +28,7 @@ function Search({ email, setEmail, currentUser, snapShot }) {
         !chatAlreadyExists()
       ) {
         let cnfrm = confirm(
-          `Do you want to start the conversation with ${
-            contact.data().email
-          } (${contact.data().name}) `
+          `Do you want to start the conversation with ${contact.data().name} `
         );
 
         if (cnfrm) {

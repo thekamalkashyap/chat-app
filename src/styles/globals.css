@@ -6,3 +6,25 @@ body {
   font-family: 'Alice';
   @apply text-lg sm:text-xl md:text-2xl
 }
+
+.header{
+  height: 4rem;
+}
+.chatName{
+  height: 4rem;  
+}
+.messages{
+  padding-left: 2rem;
+  height: 4rem;
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+  overflow: scroll; 
+  height: calc(100vh - 10.5rem);
+}
+.messages::-webkit-scrollbar {
+  display: none;
+}
+.inputMessages{
+  display: flex;
+  height: 2.5rem;
+}

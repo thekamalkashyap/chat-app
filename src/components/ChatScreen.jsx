@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { database } from '../../firebase';
 import Message from './Message';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
   collection,
   doc,
@@ -17,13 +17,13 @@ import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 export default function ChatScreen({ messages, chat }) {
-  const endOfMessageRef = useRef(null);
   const [input, setInput] = useState('');
   const { currentUser } = useAuth();
   const [recipientEmail, setRecipientEmail] = useState(null);
   const [recipient, setRecipient] = useState(null);
   const router = useRouter();
   const [messagesSnapShot, setMessagesSnapShot] = useState('');
+  const [scroll, setScroll] = useState('');
 
   useEffect(() => {
     if (currentUser) {
@@ -31,18 +31,27 @@ export default function ChatScreen({ messages, chat }) {
     }
   }, [currentUser, recipientEmail]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [scroll]);
+
   const messagesQuery = query(
     collection(database, 'chats', `${router.query.id}`, 'messages'),
     orderBy('timestamp', 'asc')
   );
+
   onSnapshot(messagesQuery, (querySnapshot) => {
     setMessagesSnapShot(querySnapshot);
+    if (querySnapshot.docs.length != 0 && scroll != querySnapshot.docs.length) {
+      setScroll(querySnapshot.docs.length);
+    }
   });
 
   const recipientQuery = query(
     collection(database, 'users'),
     where('email', '==', `${recipientEmail}`)
   );
+
   onSnapshot(recipientQuery, (querySnapshot) => {
     if (querySnapshot.docs.length != 0) {
       setRecipient(querySnapshot.docs[0].data());
@@ -50,13 +59,13 @@ export default function ChatScreen({ messages, chat }) {
   });
 
   const sendMessage = async () => {
-    await setDoc(
-      doc(database, 'users', currentUser.email),
-      {
-        lastSeen: Timestamp.now(),
-      },
-      { merge: true }
-    );
+    // await setDoc(
+    //   doc(database, 'users', currentUser.email),
+    //   {
+    //     lastSeen: Timestamp.now(),
+    //   },
+    //   { merge: true }
+    // );
 
     await setDoc(
       doc(
@@ -72,22 +81,20 @@ export default function ChatScreen({ messages, chat }) {
         user: currentUser.email,
         photoURL: currentUser.photoURL,
       }
-    );
+    ).catch((err) => alert(err.message));
 
     setInput('');
-    scrollToBottom();
+    // scrollToBottom();
   };
 
   const scrollToBottom = () => {
-    endOfMessageRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    let element = document.getElementById('messages');
+    element.scrollTop = element.scrollHeight;
   };
 
   return (
-    <div className="w-full relative">
-      <div className="flex items-center mb-12 border-y-2 py-2 border-gray-500 fixed top-16 ">
+    <>
+      <div className="chatName flex items-center ">
         <div className=" h-7 w-7 sm:h-12 sm:w-12 mx-3 relative">
           {recipient && (
             <Image
@@ -101,22 +108,23 @@ export default function ChatScreen({ messages, chat }) {
         </div>
         <div>
           {recipient && <h1>{recipient.name}</h1>}
-          {recipient ? (
+          {recipient && <h2>{recipient.email}</h2>}
+          {/* {recipient && time ? (
             <p>
               Last active:{' '}
               {recipient.lastSeen ? (
-                <span>{recipient.lastSeen.seconds}</span>
+                <span>{`${recipient.lastSeen.seconds}`}</span>
               ) : (
                 'Unavailable'
               )}
             </p>
           ) : (
             <p>Loading last seen...</p>
-          )}
+          )} */}
         </div>
       </div>
 
-      <div ref={endOfMessageRef} className='fixed top-[9rem] bottom-[3rem] left-0 right-0 pl-7 overflow-scroll'>
+      <div id="messages" className="messages ">
         {messagesSnapShot && messagesSnapShot.docs.length != 0
           ? messagesSnapShot.docs.map((message) => (
               <Message
@@ -131,15 +139,25 @@ export default function ChatScreen({ messages, chat }) {
           : JSON.parse(messages).map((message) => (
               <Message key={message.id} user={message.user} message={message} />
             ))}
+        {messagesSnapShot && messagesSnapShot.docs.length == 0 && (
+          <div className=" h-full flex justify-center items-center">
+            No chat Found
+          </div>
+        )}
+        {!messagesSnapShot && (
+          <div className=" flex h-full justify-center items-center">
+            loading...
+          </div>
+        )}
       </div>
 
-      <div className="fixed bottom-0 flex">
+      <div className="inputMessages">
         <input
           value={input}
           className=" bg-transparent w-full rounded-lg border-2"
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == 'Enter') {
+            if (e.key == 'Enter' && input) {
               e.preventDefault();
               sendMessage();
             }
@@ -153,6 +171,6 @@ export default function ChatScreen({ messages, chat }) {
           Send
         </button>
       </div>
-    </div>
+    </>
   );
 }

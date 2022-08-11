@@ -7,7 +7,7 @@ function Header() {
   const { currentUser, logout } = useAuth();
   return (
     <>
-      <div className=" sticky top-0 p-3 flex justify-between items-center">
+      <div className=" header p-3 flex justify-between items-center">
         <Link href="/">
           <span className=" font-bold cursor-pointer ">Gosheep</span>
         </Link>
