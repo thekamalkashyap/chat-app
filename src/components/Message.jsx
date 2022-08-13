@@ -11,17 +11,17 @@ function Message({ message, user }) {
   }, [currentUser, typeOfMessage]);
 
   return (
-    <div
-      className={` ${typeOfMessage == 'Sender' ? 'text-right' : 'text-left'}`}
-    >
+    <>
       <div
-        className={` inline-block w-fit max-w-[70vw] rounded-lg px-2 m-2 border ${
-          typeOfMessage == 'Sender' ? 'border-[#008800]' : 'border-[#757575]'
+        className={` break-words w-fit max-w-[70vw] rounded-lg px-2 border m-2 ${
+          typeOfMessage == 'Sender'
+            ? 'border-[#008800] ml-auto'
+            : 'border-[#757575]'
         }`}
       >
         {message.message}
       </div>
-    </div>
+    </>
   );
 }
 

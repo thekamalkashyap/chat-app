@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { database } from '../../firebase';
 import Message from './Message';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   collection,
   doc,
@@ -14,7 +14,6 @@ import {
 } from 'firebase/firestore';
 import { onSnapshot } from 'firebase/firestore';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Timeago from 'timeago-react';
 
@@ -82,14 +81,15 @@ export default function ChatScreen({ messages, chat }) {
         `${currentUser.email}-${Timestamp.now().nanoseconds}`
       ),
       {
-        timestamp: serverTimestamp(),
         message: input,
         user: currentUser.email,
         photoURL: currentUser.photoURL,
+        timestamp: serverTimestamp(),
       }
     ).catch((err) => alert(err.message));
 
     setInput('');
+    document.getElementById('inputbox').innerText = '';
   };
 
   const scrollToBottom = () => {
@@ -99,7 +99,7 @@ export default function ChatScreen({ messages, chat }) {
 
   return (
     <>
-      <div className="chatName flex items-center ">
+      <div className=" h-[4rem] flex items-center ">
         <div className=" h-9 w-9 sm:h-12 sm:w-12 mx-3 relative">
           {recipient && (
             <Image
@@ -130,7 +130,7 @@ export default function ChatScreen({ messages, chat }) {
         </div>
       </div>
 
-      <div id="messages" className="messages ">
+      <div id="messages" className="messages overflow-y-scroll">
         {messagesSnapShot && messagesSnapShot.docs.length != 0
           ? messagesSnapShot.docs.map((message) => (
               <Message
@@ -146,28 +146,29 @@ export default function ChatScreen({ messages, chat }) {
               <Message key={message.id} user={message.user} message={message} />
             ))}
         {messagesSnapShot && messagesSnapShot.docs.length == 0 && (
-          <div className=" h-full flex justify-center items-center">
+          <div className=" h-[70vh] flex justify-center items-center">
             No chat Found
           </div>
         )}
         {!messagesSnapShot && (
-          <div className=" flex h-full justify-center items-center">
+          <div className=" flex h-[70vh] justify-center items-center">
             loading...
           </div>
         )}
       </div>
 
-      <div className="inputMessages border rounded-lg">
-        <input
-          value={input}
-          className=" bg-transparent focus:outline-none px-2 w-full mr-1"
-          onChange={(e) => setInput(e.target.value)}
+      <div className="flex bg-[#292929] absolute left-0 right-0 bottom-0 max-w-2xl w-full mx-auto min-h-[2.5rem] border rounded-lg">
+        <div
+          contentEditable
+          id="inputbox"
+          className="inputbox focus:outline-none px-2 py-1 w-full max-h-[10rem] overflow-y-scroll "
           onKeyDown={(e) => {
-            if (e.key == 'Enter' && input) {
+            if (e.key == 'Enter' && e.currentTarget.textContent.trim()) {
               e.preventDefault();
               sendMessage();
             }
           }}
+          onInput={(e) => setInput(e.currentTarget.textContent)}
         />
         <button
           disabled={!input}

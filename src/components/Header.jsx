@@ -1,25 +1,28 @@
-import React from 'react';
 import Link from 'next/link';
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 import { useAuth } from '../context/AuthContext';
 import Image from 'next/image';
+import InstallApp from './InstallApp';
 function Header() {
   const { currentUser, logout } = useAuth();
   return (
     <>
-      <div className=" header p-3 flex justify-between items-center">
+      <div className=" h-[4rem] p-3 flex justify-between items-center">
         <Link href="/">
           <span className=" font-bold cursor-pointer ">Gosheep</span>
         </Link>
-        <button
-          disabled={currentUser ? false : true}
-          className=" disabled:opacity-60"
-          onClick={() => {
-            document.getElementById('portal').classList.toggle('hidden');
-          }}
-        >
-          <DotsVerticalIcon className="w-5 h-5" />
-        </button>
+        <div className="flex">
+          <InstallApp />
+          <button
+            disabled={currentUser ? false : true}
+            className=" disabled:opacity-60"
+            onClick={() => {
+              document.getElementById('portal').classList.toggle('hidden');
+            }}
+          >
+            <DotsVerticalIcon className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       <div
         id="portal"

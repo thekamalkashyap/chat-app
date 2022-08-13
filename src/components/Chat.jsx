@@ -1,12 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  getDocs,
-} from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { database } from '../../firebase';
 import Image from 'next/image';
 function Chat({ currentUser, id, users }) {
@@ -35,7 +29,7 @@ function Chat({ currentUser, id, users }) {
       {receiverDetails && (
         <div
           onClick={route}
-          className="h-10 my-3 rounded-lg flex items-center py-7 hover:bg-[#383838] cursor-pointer "
+          className="my-3 rounded-lg flex items-center py-2 hover:bg-[#383838] cursor-pointer "
         >
           <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
             <Image
@@ -52,7 +46,9 @@ function Chat({ currentUser, id, users }) {
           </div>
         </div>
       )}
-      {!receiverDetails && <div className=" text-center">loading...</div>}
+      {!receiverDetails && (
+        <div className=" my-3 py-5 text-center">loading...</div>
+      )}
     </>
   );
 }

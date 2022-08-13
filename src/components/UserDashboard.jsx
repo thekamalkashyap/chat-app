@@ -27,7 +27,7 @@ function UserDashboard() {
         currentUser={currentUser}
         snapShot={snapShot}
       />
-      <div className="mt-10">
+      <div className=" chatlist mt-7">
         {snapShot &&
           snapShot.docs.length != 0 &&
           currentUser &&
@@ -41,11 +41,6 @@ function UserDashboard() {
               />
             );
           })}
-        {!snapShot && (
-          <div className=" h-[70vh]  w-full flex justify-center items-center">
-            loading...
-          </div>
-        )}
         {snapShot && snapShot.docs.length == 0 && (
           <div className=" h-[70vh]  w-full flex justify-center items-center">
             No chat found

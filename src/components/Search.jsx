@@ -1,4 +1,3 @@
-import React from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 import { database } from '../../firebase';
 import { getDoc, setDoc, doc } from 'firebase/firestore';

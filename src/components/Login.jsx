@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import googleLogo from '../../public/google.png';
 import Image from 'next/image';

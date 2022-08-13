@@ -4,26 +4,29 @@
 
 body {
   font-family: 'Alice';
-  @apply text-lg sm:text-xl md:text-2xl
+  @apply text-lg sm:text-xl md:text-2xl;
+}
+.chatlist::-webkit-scrollbar {
+  display: none;
 }
 
-.header{
-  height: 4rem;
+.chatlist {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.chatName{
-  height: 4rem;  
-}
-.messages{
-  height: 4rem;
-  -ms-overflow-style: none;  
-  scrollbar-width: none; 
-  overflow: scroll; 
+
+.messages {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   height: calc(100vh - 10.5rem);
 }
 .messages::-webkit-scrollbar {
   display: none;
 }
-.inputMessages{
-  display: flex;
-  height: 2.5rem;
+.inputbox::-webkit-scrollbar {
+  display: none;
+}
+.inputbox {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
