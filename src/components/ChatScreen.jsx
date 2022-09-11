@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { database } from '../../firebase';
 import Message from './Message';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   collection,
   doc,

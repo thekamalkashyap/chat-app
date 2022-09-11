@@ -29,7 +29,7 @@ export default function Home() {
     <>
       {!currentUser ? <Login /> : <UserDashboard />}
       {loading && (
-        <div className=" z-30 bg-[#292929] fixed top-0 h-screen w-screen flex justify-center items-center">
+        <div className=" z-30 bg-[#292929] fixed top-0 left-0 h-screen w-screen flex justify-center items-center">
           loading...
         </div>
       )}

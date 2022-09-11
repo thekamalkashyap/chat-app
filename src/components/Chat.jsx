@@ -46,9 +46,6 @@ function Chat({ currentUser, id, users }) {
           </div>
         </div>
       )}
-      {!receiverDetails && (
-        <div className=" my-3 py-5 text-center">loading...</div>
-      )}
     </>
   );
 }

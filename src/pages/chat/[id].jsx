@@ -8,6 +8,7 @@ import {
   getDocs,
   getDoc,
   serverTimestamp,
+  limit,
 } from 'firebase/firestore';
 import Router from 'next/router.js';
 import { useEffect } from 'react';
@@ -31,7 +32,11 @@ export default function Id({ messages, chat }) {
 
 export async function getServerSideProps(context) {
   const ref = doc(database, 'chats', `${context.query.id}`);
-  const q = query(collection(ref, 'messages'), orderBy('timestamp', 'asc'));
+  const q = query(
+    collection(ref, 'messages'),
+    orderBy('timestamp', 'asc'),
+    limit(10)
+  );
 
   const messagesResponse = await getDocs(q);
 
